@@ -24,6 +24,8 @@ public class PlayerCtrl : MonoBehaviour
     public Anim anim;
     public Animation _animation;
 
+    public int hp = 100;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -40,7 +42,7 @@ public class PlayerCtrl : MonoBehaviour
         h = Input.GetAxis("Horizontal");
         v = Input.GetAxis("Vertical");
 
-        Debug.Log("H=" + h.ToString() + " V=" + v.ToString());
+        //Debug.Log("H=" + h.ToString() + " V=" + v.ToString());
 
         Vector3 moveDir = (Vector3.forward * v) + (Vector3.right * h);
 
@@ -62,5 +64,25 @@ public class PlayerCtrl : MonoBehaviour
         else{
             _animation.CrossFade(anim.idle.name, 0.3f);
         }
+    }
+
+    private void OnTriggerEnter(Collider coll)
+    {
+        if(coll.gameObject.tag == "PUNCH")
+        {
+            hp -= 10;
+
+            Debug.Log("Player HP = " + hp.ToString());
+
+            if(hp <= 0)
+            {
+                PlayerDie();
+            }
+        }
+    }
+
+    void PlayerDie()
+    {
+        Debug.Log("Player Die !!");
     }
 }

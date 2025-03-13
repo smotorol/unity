@@ -12,7 +12,7 @@ public class WallCtrl : MonoBehaviour
         {
             GameObject spark = (GameObject)Instantiate(sparkEffect, collision.transform.position, Quaternion.identity);
 
-            Destroy(spark, spark.GetComponent<ParticleSystem>().duration + 0.2f);
+            Destroy(spark, spark.GetComponent<ParticleSystem>().main.duration + 0.2f);
 
             Destroy(collision.gameObject);
         }

@@ -9,13 +9,18 @@ public class MyGizmo : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Gizmos.color = _color;
-        Gizmos.DrawSphere(transform.position, _radius);
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = _color;
+
+        Gizmos.DrawSphere(transform.position, _radius);
     }
 }
