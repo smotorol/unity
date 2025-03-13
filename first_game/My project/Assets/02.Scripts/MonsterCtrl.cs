@@ -21,6 +21,8 @@ public class MonsterCtrl : MonoBehaviour
     public GameObject bloodEffect;
     public GameObject bloodDecal;
 
+    private int hp = 100;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -113,7 +115,32 @@ public class MonsterCtrl : MonoBehaviour
 
             Destroy(coll.gameObject);
 
+            hp -= coll.gameObject.GetComponent<BulletCtrl>().damage;
+            if (hp <= 0)
+            {
+                MonsterDie();
+            }
+
+            Destroy(coll.gameObject);
             animator.SetTrigger("IsHit");
+        }
+    }
+
+    void MonsterDie()
+    {
+        StopAllCoroutines();
+
+        isDie = true;
+
+        monsterState = MonsterState.idle;
+        nvAgent.isStopped = true;
+        animator.SetTrigger("IsDie");
+
+        gameObject.GetComponentInChildren<CapsuleCollider>().enabled = false;
+
+        foreach(Collider coll in gameObject.GetComponentsInChildren<SphereCollider>())
+        {
+            coll.enabled = false;
         }
     }
 
