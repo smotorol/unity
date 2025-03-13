@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [System.Serializable]
@@ -25,6 +26,9 @@ public class PlayerCtrl : MonoBehaviour
     public Animation _animation;
 
     public int hp = 100;
+
+    public delegate void PlayerDieHandler();
+    public static event PlayerDieHandler OnPlayerDie;
 
     // Start is called before the first frame update
     void Start()
@@ -84,5 +88,15 @@ public class PlayerCtrl : MonoBehaviour
     void PlayerDie()
     {
         Debug.Log("Player Die !!");
+
+        ////
+        //GameObject[] monsters = GameObject.FindGameObjectsWithTag("MONSTER");
+
+        //foreach (GameObject monster in monsters)
+        //{
+        //    monster.SendMessage("OnPlayerDie", SendMessageOptions.DontRequireReceiver);
+        //}
+
+        OnPlayerDie();
     }
 }

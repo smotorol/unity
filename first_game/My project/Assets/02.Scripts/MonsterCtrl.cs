@@ -44,6 +44,16 @@ public class MonsterCtrl : MonoBehaviour
         
     }
 
+    private void OnEnable()
+    {
+        PlayerCtrl.OnPlayerDie += this.OnPlayerDie;
+    }
+
+    private void OnDisable()
+    {
+        PlayerCtrl.OnPlayerDie -= this.OnPlayerDie;
+    }
+
     IEnumerator CheckMonsterState()
     {
         while (!isDie)
@@ -120,5 +130,13 @@ public class MonsterCtrl : MonoBehaviour
         blood2.transform.localScale = Vector3.one * scale;
 
         Destroy(blood2, 5.0f);
+    }
+
+    void OnPlayerDie()
+    {
+        StopAllCoroutines();
+
+        nvAgent.isStopped = true;
+        animator.SetTrigger("IsPlayerDie");
     }
 }

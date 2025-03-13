@@ -68,6 +68,7 @@
     <Compile Include="Assets\02.Scripts\WallCtrl.cs" />
     <Compile Include="Assets\02.Scripts\MyGizmo.cs" />
     <Compile Include="Assets\02.Scripts\BarrelCtrl.cs" />
+    <Compile Include="Assets\02.Scripts\DelegateTest.cs" />
     <Compile Include="Assets\02.Scripts\PerformanceMgr.cs" />
   </ItemGroup>
   <ItemGroup>
