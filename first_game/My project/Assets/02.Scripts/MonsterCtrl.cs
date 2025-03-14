@@ -23,8 +23,9 @@ public class MonsterCtrl : MonoBehaviour
 
     private int hp = 100;
 
-    // Start is called before the first frame update
-    void Start()
+    private GameUI gameUI;
+
+    private void Awake()
     {
         monsterTr = this.gameObject.GetComponent<Transform>();
 
@@ -34,10 +35,11 @@ public class MonsterCtrl : MonoBehaviour
 
         animator = this.gameObject.GetComponent<Animator>();
 
-        StartCoroutine(this.CheckMonsterState());
-
-        StartCoroutine(this.MonsterAction());
-        //nvAgent.destination = playerTr.position;
+        gameUI = GameObject.Find("GameUI").GetComponent<GameUI>();
+    }
+    // Start is called before the first frame update
+    void Start()
+    {
     }
 
     // Update is called once per frame
@@ -49,6 +51,10 @@ public class MonsterCtrl : MonoBehaviour
     private void OnEnable()
     {
         PlayerCtrl.OnPlayerDie += this.OnPlayerDie;
+
+        StartCoroutine(this.CheckMonsterState());
+
+        StartCoroutine(this.MonsterAction());
     }
 
     private void OnDisable()
@@ -128,6 +134,8 @@ public class MonsterCtrl : MonoBehaviour
 
     void MonsterDie()
     {
+        gameObject.tag = "Untagged";
+
         StopAllCoroutines();
 
         isDie = true;
@@ -142,6 +150,10 @@ public class MonsterCtrl : MonoBehaviour
         {
             coll.enabled = false;
         }
+
+        gameUI.DispScore(50);
+
+        StartCoroutine(this.PushObjectPool());
     }
 
     void CreateBloodEffect(Vector3 pos)
@@ -165,5 +177,24 @@ public class MonsterCtrl : MonoBehaviour
 
         nvAgent.isStopped = true;
         animator.SetTrigger("IsPlayerDie");
+    }
+
+    IEnumerator PushObjectPool()
+    {
+        yield return new WaitForSeconds(3.0f);
+
+        isDie = false;
+        hp = 100;
+        gameObject.tag = "MONSTER";
+        monsterState = MonsterState.idle;
+
+        gameObject.GetComponentInChildren<CapsuleCollider>().enabled = true;
+
+        foreach (Collider coll in gameObject.GetComponentsInChildren<CapsuleCollider>())
+        {
+            coll.enabled = true;
+        }
+
+        gameObject.SetActive(false);
     }
 }

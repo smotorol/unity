@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 [System.Serializable]
 public class Anim
@@ -19,13 +20,19 @@ public class PlayerCtrl : MonoBehaviour
     private float v = 0.0f;
 
     private Transform tr;
-    public float moveSpeed = 10.0f;
+    private Rigidbody rb;
+    public float moveSpeed = 1.0f;
     public float rotSpeed = 100.0f;
 
     public Anim anim;
     public Animation _animation;
 
     public int hp = 100;
+    private int initHp;
+
+    public Image imgHpbar;
+
+    //private GameMgr gameMgr;
 
     public delegate void PlayerDieHandler();
     public static event PlayerDieHandler OnPlayerDie;
@@ -33,7 +40,12 @@ public class PlayerCtrl : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        initHp = hp;
+
         tr = GetComponent<Transform>();
+        rb = GetComponent<Rigidbody>();
+
+        //gameMgr = GameObject.Find("GameManager").GetComponent<GameMgr>();
 
         _animation = GetComponentInChildren<Animation>();
         _animation.clip = anim.idle;
@@ -70,11 +82,18 @@ public class PlayerCtrl : MonoBehaviour
         }
     }
 
+    private void FixedUpdate()
+    {
+        
+    }
+
     private void OnTriggerEnter(Collider coll)
     {
         if(coll.gameObject.tag == "PUNCH")
         {
             hp -= 10;
+
+            imgHpbar.fillAmount = (float)hp / (float)initHp;
 
             Debug.Log("Player HP = " + hp.ToString());
 
@@ -98,5 +117,7 @@ public class PlayerCtrl : MonoBehaviour
         //}
 
         OnPlayerDie();
+
+        GameMgr.instance.isGameOver = true;
     }
 }
